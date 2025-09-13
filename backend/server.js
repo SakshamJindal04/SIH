@@ -23,7 +23,10 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // --- 4. DATABASE CONNECTION STRING ---
-const MONGO_URI = 'mongodb://localhost:27017/safekart';
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 // --- 5. NEW LOCAL PRODUCT DATABASE ---
 const sampleProducts = [
