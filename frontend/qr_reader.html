@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Reader - SafeKart</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav>
+    <div class="nav-logo"><a href="index.html">SafeKart</a></div>
+    <ul class="nav-links">
+        <li><a href="verify.html">Verify Product</a></li>
+        <li><a href="qr_reader.html">QR Reader</a></li>
+        <li><a href="qr_generator.html">QR Generator</a></li>
+        <li><a href="track.html">Track Order</a></li>
+        <li><a href="admin.html">Admin</a></li>
+    </ul>
+    <ul class="nav-links">
+    <li><a href="shopping.html">Shopping</a></li>
+    <li><a href="verify.html">Verify Product</a></li>
+    </ul>
+    <label class="theme-switch" for="theme-toggle">
+        <input type="checkbox" id="theme-toggle" />
+        <span class="slider"></span>
+    </label>
+</nav>
+    <div class="main-content">
+        <div class="container">
+            <header>
+                <h1>📷 QR Code Reader</h1>
+                <p>Point your camera at a QR code to scan it.</p>
+            </header>
+            <div id="reader"></div>
+            <div id="result"></div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script>
+        const resultContainer = document.getElementById('result');
+        function onScanSuccess(decodedText, decodedResult) {
+            resultContainer.innerHTML = `Scan result: <a href="${decodedText}">${decodedText}</a>`;
+            html5QrcodeScanner.clear(); // To stop scanning after success
+        }
+        const html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess);
+    </script>
+    <script src="theme.js"></script>
+</body>
+</html>

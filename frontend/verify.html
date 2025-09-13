@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Verification - SafeKart</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav>
+    <div class="nav-logo"><a href="index.html">SafeKart</a></div>
+    <ul class="nav-links">
+        <li><a href="verify.html">Verify Product</a></li>
+        <li><a href="qr_reader.html">QR Reader</a></li>
+        <li><a href="qr_generator.html">QR Generator</a></li>
+        <li><a href="track.html">Track Order</a></li>
+        <li><a href="admin.html">Admin</a></li>
+    </ul>
+    <ul class="nav-links">
+    <li><a href="shopping.html">Shopping</a></li>
+    <li><a href="verify.html">Verify Product</a></li>
+    </ul>
+    <label class="theme-switch" for="theme-toggle">
+        <input type="checkbox" id="theme-toggle" />
+        <span class="slider"></span>
+    </label>
+</nav>
+    <div class="main-content">
+        <div class="container">
+            <header>
+                <h1>🛒 Item Verification</h1>
+                <p>Enter item details below to verify its authenticity.</p>
+            </header>
+            
+            <form id="verify-form">
+                <div class="form-group">
+                    <label for="barcode">Barcode</label>
+                    <input type="text" id="barcode" placeholder="e.g., 8901234567890" required>
+                </div>
+                <div class="form-group">
+                    <label for="weight">Weight (grams)</label>
+                    <input type="number" id="weight" placeholder="e.g., 250" required>
+                </div>
+                <div class="form-group">
+                    <label for="mrp">MRP (₹)</label>
+                    <input type="number" id="mrp" step="0.01" placeholder="e.g., 99.50" required>
+                </div>
+                <div class="form-group">
+                    <label for="expiry">Expiry Date</label>
+                    <input type="date" id="expiry" required>
+                </div>
+                <button type="submit" class="btn">Verify Item</button>
+            </form>
+        </div>
+    </div>
+
+<footer>
+    <div class="footer-links">
+        <a href="about.html">About Us</a>
+        <a href="developer.html">Developer</a>
+    </div>
+    <p>&copy; 2025 SafeKart. All Rights Reserved.</p>
+</footer>
+
+    <script src="script.js"></script>
+    <script src="theme.js"></script>
+</body>
+</html>

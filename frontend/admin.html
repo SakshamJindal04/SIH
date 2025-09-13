@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SafeKart</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="login-screen">
+        <div class="login-container">
+            <h1>Admin Login</h1>
+            <p>Please enter your credentials to access the dashboard.</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" value="" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" value="" required>
+                </div>
+                <p id="login-error" class="error-message"></p>
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="dashboard" class="content-hidden">
+        <nav>
+                <div class="nav-logo"><a href="index.html">SafeKart</a></div>
+    <ul class="nav-links">
+        <li><a href="verify.html">Verify Product</a></li>
+        <li><a href="qr_reader.html">QR Reader</a></li>
+        <li><a href="qr_generator.html">QR Generator</a></li>
+        <li><a href="track.html">Track Order</a></li>
+        <li><a href="admin.html">Admin</a></li>
+    </ul>
+    <ul class="nav-links">
+    <li><a href="shopping.html">Shopping</a></li>
+    <li><a href="verify.html">Verify Product</a></li>
+    </ul>
+    <label class="theme-switch" for="theme-toggle">
+        <input type="checkbox" id="theme-toggle" />
+        <span class="slider"></span>
+    </label>
+            </nav>
+        <div class="dashboard-main-content">
+            <header class="dashboard-header">
+                <h1>Admin Dashboard</h1>
+                <button id="logout-btn" class="btn btn-secondary">Logout</button>
+            </header>
+
+            <section class="stats-cards">
+                <div class="stat-card">
+                    <h3>Total Verifications</h3>
+                    <p id="total-verifications">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Successful (PASS)</h3>
+                    <p id="successful-verifications">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Failed (FAIL)</h3>
+                    <p id="failed-verifications">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Success Rate</h3>
+                    <p id="success-rate">0%</p>
+                </div>
+            </section>
+
+            <div class="container admin-container">
+                <h2>Verification Logs</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Barcode</th>
+                                <th>Status</th>
+                                <th>Customer</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="admin.js"></script>
+    <script src="theme.js"></script>
+</body>
+</html>

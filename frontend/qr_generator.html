@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator - SafeKart</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-logo"><a href="index.html">SafeKart</a></div>
+    <ul class="nav-links">
+        <li><a href="verify.html">Verify Product</a></li>
+        <li><a href="qr_reader.html">QR Reader</a></li>
+        <li><a href="qr_generator.html">QR Generator</a></li>
+        <li><a href="track.html">Track Order</a></li>
+        <li><a href="admin.html">Admin</a></li>
+    </ul>
+    <ul class="nav-links">
+    <li><a href="shopping.html">Shopping</a></li>
+    <li><a href="verify.html">Verify Product</a></li>
+    </ul>
+    <label class="theme-switch" for="theme-toggle">
+        <input type="checkbox" id="theme-toggle" />
+        <span class="slider"></span>
+    </label>
+</nav>
+    <div class="main-content">
+        <div class="container">
+            <header>
+                <h1>Generator</h1>
+                <p>Enter text or a URL to create a QR code.</p>
+            </header>
+            <div class="form-group">
+                <textarea id="qr-text" rows="4" placeholder="Enter text or URL here..."></textarea>
+            </div>
+            <button id="generate-btn" class="btn">Generate QR Code</button>
+            <div id="qr-code-result"></div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator/qrcode.js"></script>
+    <script>
+        document.getElementById('generate-btn').addEventListener('click', () => {
+            const text = document.getElementById('qr-text').value;
+            const qrCodeResult = document.getElementById('qr-code-result');
+            qrCodeResult.innerHTML = '';
+            if (text) {
+                const typeNumber = 4;
+                const errorCorrectionLevel = 'L';
+                const qr = qrcode(typeNumber, errorCorrectionLevel);
+                qr.addData(text);
+                qr.make();
+                qrCodeResult.innerHTML = qr.createImgTag(5);
+            }
+        });
+    </script>
+    <script src="theme.js"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Products - SafeKart</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav>
+    <div class="nav-logo"><a href="index.html">SafeKart</a></div>
+    <ul class="nav-links">
+        <li><a href="verify.html">Verify Product</a></li>
+        <li><a href="qr_reader.html">QR Reader</a></li>
+        <li><a href="qr_generator.html">QR Generator</a></li>
+        <li><a href="track.html">Track Order</a></li>
+        <li><a href="admin.html">Admin</a></li>
+    </ul>
+    <ul class="nav-links">
+    <li><a href="shopping.html">Shopping</a></li>
+    <li><a href="verify.html">Verify Product</a></li>
+    </ul>
+    <label class="theme-switch" for="theme-toggle">
+        <input type="checkbox" id="theme-toggle" />
+        <span class="slider"></span>
+    </label>
+    </nav>
+
+    <div class="main-content">
+        <div class="container search-container">
+            <header>
+                <h1>🛍️ Search Our Verified Inventory</h1>
+                <p>Find products from our trusted inventory. Every item purchased here comes with a unique, verifiable SafeKart QR code.</p>
+            </header>
+            <form id="search-form" class="search-form">
+                <input type="text" id="search-query" placeholder="e.g., Coffee, Laptop, T-Shirt" required>
+                <button type="submit" class="btn">Search</button>
+            </form>
+            <div id="search-results" class="search-results"></div>
+        </div>
+    </div>
+    
+    <div id="checkout-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            
+            <div class="modal-step" data-step="1">
+                <h2>Step 1: Your Details</h2>
+                <div class="form-group">
+                    <label for="customer-name">Full Name</label>
+                    <input type="text" id="customer-name" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-email">Email Address</label>
+                    <input type="email" id="customer-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="customer-mobile">Mobile Number</label>
+                    <input type="tel" id="customer-mobile" placeholder="Enter your 10-digit mobile number" required>
+                </div>
+                <button class="btn modal-next-btn">Next: Delivery Address</button>
+            </div>
+
+            <div class="modal-step" data-step="2" style="display: none;">
+                <h2>Step 2: Delivery Address</h2>
+                <div class="form-group">
+                    <label for="delivery-address">Full Address</label>
+                    <textarea id="delivery-address" rows="3" placeholder="Enter your full delivery address" required></textarea>
+                </div>
+                <div class="modal-nav">
+                    <button class="btn btn-secondary modal-back-btn">Back</button>
+                    <button class="btn modal-next-btn">Next: Payment</button>
+                </div>
+            </div>
+            <div class="modal-step" data-step="3" style="display: none;">
+                <h2>Step 3: Delivery & Payment</h2>
+                <div class="form-group">
+                    <label>Mode of Delivery</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="delivery-mode" value="cod" checked> Cash on Delivery (COD)</label>
+                        <label><input type="radio" name="delivery-mode" value="online"> Online Payment</label>
+                    </div>
+                </div>
+                <div id="online-payment-options" style="display: none;">
+                    <label>Select Payment Method</label>
+                    <div class="payment-options">
+                        <button class="btn-payment">Credit/Debit Card</button>
+                        <button class="btn-payment">UPI</button>
+                        <button class="btn-payment">Net Banking</button>
+                    </div>
+                </div>
+                <div class="modal-nav">
+                    <button class="btn btn-secondary modal-back-btn">Back</button>
+                    <button id="confirm-order-btn" class="btn">Confirm & Place Order</button>
+                </div>
+            </div>
+            <div class="modal-step" data-step="4" style="display: none;">
+                 <h2>✅ Purchase Successful!</h2>
+                 <p>Your unique, verifiable QR code is below. This code can only be scanned 3 times.</p>
+                 <div id="modal-qr-code"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="shopping.js"></script>
+    <script src="theme.js"></script>
+</body>
+</html>
