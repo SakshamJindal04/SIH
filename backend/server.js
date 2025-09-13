@@ -34,7 +34,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-const MONGO_URI = 'mongodb+srv://admin123:<Sa8077630379>@cluster0.sclapsl.mongodb.net/safekart';
+const MONGO_URI = 'mongodb+srv://admin123:<Sa8077630379>@cluster0.sclapsl.mongodb.net/';
 
 // --- 4. LOCAL PRODUCT DATABASE ---
 const sampleProducts = [
