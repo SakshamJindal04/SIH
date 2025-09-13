@@ -1,13 +1,11 @@
 // backend/server.js
 
-// --- 1. IMPORTS & CONFIGURATION ---
-require('dotenv').config(); // Loads environment variables from .env file
+// --- 1. ALL IMPORTS AT THE TOP ---
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const qrcode = require('qrcode');
 const path = require('path');
-const twilio = require('twilio');
 const { v4: uuidv4 } = require('uuid');
 
 // Import your models
@@ -15,28 +13,19 @@ const Verification = require('./models/Verification');
 const Product = require('./models/Product');
 const Customer = require('./models/Customer');
 
-// --- 2. INITIALIZE APP & TWILIO ---
+// --- 2. CREATE THE EXPRESS APP ---
 const app = express();
 const PORT = 3000;
 
-// Initialize Twilio Client only if credentials exist
-let twilioClient;
-if (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) {
-    twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-    console.log('Twilio client initialized.');
-} else {
-    console.warn('Twilio credentials not found in .env file. SMS notifications will be disabled.');
-}
-
-
-// --- 3. MIDDLEWARE & DB CONNECTION ---
+// --- 3. MIDDLEWARE ---
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-const MONGO_URI = 'mongodb+srv://Safekart:<SafeKartDB2025>@cluster0.sclapsl.mongodb.net/SIH';
+// --- 4. DATABASE CONNECTION STRING ---
+const MONGO_URI = 'mongodb://localhost:27017/safekart';
 
-// --- 4. LOCAL PRODUCT DATABASE ---
+// --- 5. NEW LOCAL PRODUCT DATABASE ---
 const sampleProducts = [
     // Electronics
     { barcode: '8900000000001', name: 'SmartLED Pro Laptop 14 inch', weight: 1400, mrp: 89999.00 },
@@ -57,11 +46,16 @@ const sampleProducts = [
     { barcode: '8900000000009', name: 'The Midnight Library - Novel', weight: 350, mrp: 450.00 },
 ];
 
-// --- 5. DEFINE ALL API ENDPOINTS ---
+// --- 6. DEFINE ALL API ENDPOINTS ---
 
+/**
+ * @route   GET /search-products/:query
+ * @desc    Searches the internal product database.
+ */
 app.get('/search-products/:query', async (req, res) => {
     try {
         const query = req.params.query;
+        // Use a regular expression for a case-insensitive search on the product name
         const results = await Product.find({ name: { $regex: query, $options: 'i' } });
         res.json(results);
     } catch (error) {
@@ -69,17 +63,25 @@ app.get('/search-products/:query', async (req, res) => {
     }
 });
 
+/**
+ * @route   POST /purchase
+ * @desc    Simulates a customer purchasing a product.
+ */
+// In backend/server.js, find your /purchase endpoint and update it
+
 app.post('/purchase', async (req, res) => {
     try {
+        // ADD customerMobile to the destructuring
         const { customerName, customerEmail, customerMobile, productBarcode } = req.body;
         const product = await Product.findOne({ barcode: productBarcode });
         if (!product) {
             return res.status(404).json({ message: "Product not found in master database."});
         }
+        // Add the mobile number when creating the new customer
         const newCustomer = new Customer({ 
             name: customerName, 
             email: customerEmail, 
-            mobile: customerMobile 
+            mobile: customerMobile // <-- ADD THIS LINE
         });
         await newCustomer.save();
         res.status(201).json({ 
@@ -92,9 +94,14 @@ app.post('/purchase', async (req, res) => {
     }
 });
 
+/**
+ * @route   POST /verify
+ * @desc    Verifies hardware data against the master product database.
+ */
 app.post('/verify', async (req, res) => {
     try {
         const { barcode, weight, mrp, customerId } = req.body;
+        
         const officialProduct = await Product.findOne({ barcode: barcode });
 
         if (!officialProduct) {
@@ -130,6 +137,10 @@ app.post('/verify', async (req, res) => {
     }
 });
 
+/**
+ * @route   GET /scan/:id
+ * @desc    This endpoint is accessed when a QR code is scanned.
+ */
 app.get('/scan/:id', async (req, res) => {
     try {
         const verification = await Verification.findById(req.params.id).populate('customer');
@@ -140,27 +151,6 @@ app.get('/scan/:id', async (req, res) => {
         }
 
         if (verification.scanCount >= 3) {
-            // Send SMS alert on the first scan attempt *after* the limit is reached
-            if (verification.scanCount === 3 && verification.customer.mobile && twilioClient) {
-                try {
-                    const customerMobile = verification.customer.mobile;
-                    // Twilio requires numbers in E.164 format (e.g., +919876543210)
-                    const formattedMobile = customerMobile.startsWith('+') ? customerMobile : `+91${customerMobile}`;
-
-                    await twilioClient.messages.create({
-                        body: `SafeKart Alert: The QR code for your product "${product.name}" has been scanned more than the allowed 3 times. If this was not you, please contact support.`,
-                        from: process.env.TWILIO_PHONE_NUMBER,
-                        to: formattedMobile
-                    });
-                    console.log(`✅ Security alert SMS sent to ${formattedMobile}`);
-                } catch (smsError) {
-                    console.error('❌ Twilio SMS Error:', smsError.message);
-                }
-            }
-            
-            verification.scanCount += 1; // Still increment to track further attempts
-            await verification.save();
-            
             return res.status(403).send(`<div style="font-family: sans-serif; text-align: center; padding: 40px;"><h1 style="color: #e74c3c;">❌ QR Code Expired</h1><p>This QR code has reached its maximum scan limit of 3.</p><p>Product: ${product.name}</p></div>`);
         }
 
@@ -169,11 +159,14 @@ app.get('/scan/:id', async (req, res) => {
 
         res.status(200).send(`<div style="font-family: sans-serif; text-align: center; padding: 40px; border: 5px solid #2ecc71; margin: 20px;"><h1 style="color: #2ecc71;">✅ Product Verified</h1><h2>${product.name}</h2><p><strong>Barcode:</strong> ${product.barcode}</p><p><strong>Weight:</strong> ${product.weight}g</p><p><strong>MRP:</strong> ₹${product.mrp.toFixed(2)}</p><hr><h3>Customer Details</h3><p><strong>Name:</strong> ${verification.customer.name}</p><p><strong>Email:</strong> ${verification.customer.email}</p><p><strong>Purchase Date:</strong> ${new Date(verification.customer.purchaseDate).toLocaleString()}</p><hr><h2 style="color: #3498db;">Scan Count: ${verification.scanCount} of 3</h2></div>`);
     } catch (error) {
-        console.error('Error in /scan endpoint:', error);
         res.status(500).send('<h1>Internal Server Error</h1>');
     }
 });
 
+/**
+ * @route   GET /logs
+ * @desc    Retrieves all verification logs.
+ */
 app.get('/logs', async (req, res) => {
     try {
         const logs = await Verification.find().sort({ timestamp: -1 }).populate('customer');
@@ -183,8 +176,7 @@ app.get('/logs', async (req, res) => {
     }
 });
 
-
-// --- 6. SERVER STARTUP LOGIC ---
+// --- 7. SERVER STARTUP LOGIC ---
 
 const seedDatabaseIfNeeded = async () => {
     try {
