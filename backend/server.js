@@ -34,7 +34,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-const MONGO_URI = 'mongodb+srv://Safekart:<SafeKartDB2025>@cluster0.sclapsl.mongodb.net/';
+const MONGO_URI = 'mongodb+srv://Safekart:<SafeKartDB2025>@cluster0.sclapsl.mongodb.net/SIH';
 
 // --- 4. LOCAL PRODUCT DATABASE ---
 const sampleProducts = [
