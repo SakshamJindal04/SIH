@@ -23,10 +23,18 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // --- 4. DATABASE CONNECTION STRING ---
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const mongoose = require("mongoose");
+
+mongoose.connect(
+  "mongodb+srv://Safekart:SafeKartDB2025@cluster0.sclapsl.mongodb.net/Safekart",
+  {
+    // these options are not needed anymore in latest driver, safe to remove
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true,
+  }
+)
+.then(() => console.log("✅ MongoDB connected successfully!"))
+.catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // --- 5. NEW LOCAL PRODUCT DATABASE ---
 const sampleProducts = [
