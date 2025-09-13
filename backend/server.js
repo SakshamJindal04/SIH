@@ -23,8 +23,6 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // --- 4. DATABASE CONNECTION STRING ---
-const mongoose = require("mongoose");
-
 mongoose.connect(
   "mongodb+srv://Safekart:SafeKartDB2025@cluster0.sclapsl.mongodb.net/Safekart",
   {
