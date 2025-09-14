@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const MONGO_URI = "mongodb+srv://Safekart:SafeKartDB2025@cluster0.sclapsl.mongodb.net/Safekart";
+const MONGO_URI = "mongodb+srv://safekart_user:MySafePassword2025@safekartcluster.yiu8d5o.mongodb.net/?retryWrites=true&w=majority&appName=SafekartCluster";
 
 const connectDB = async () => {
   try {
