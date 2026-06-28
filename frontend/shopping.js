@@ -15,6 +15,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Event Listeners ---
     searchForm.addEventListener('submit', handleSearch);
     
+    // Load default products on startup
+    displayResults([
+        { name: "Organic Espresso Beans", mrp: 850, barcode: "1234567890123" },
+        { name: "Premium Cotton T-Shirt", mrp: 1200, barcode: "1234567890124" },
+        { name: "Wireless Earbuds Pro", mrp: 4500, barcode: "1234567890125" },
+        { name: "Smart Fitness Watch", mrp: 2999, barcode: "1234567890126" },
+        { name: "Leather Messenger Bag", mrp: 3500, barcode: "1234567890127" },
+        { name: "Mechanical Keyboard", mrp: 5200, barcode: "1234567890128" },
+        { name: "Noise Cancelling Headphones", mrp: 8999, barcode: "1234567890129" },
+        { name: "Stainless Steel Water Bottle", mrp: 750, barcode: "1234567890130" }
+    ]);
+    
     checkoutModal.addEventListener('click', (e) => {
         if (e.target.classList.contains('modal-next-btn')) {
             handleNextStep();
@@ -53,18 +65,30 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayResults(results) {
         searchResultsContainer.innerHTML = '';
         if (results.length === 0) {
-            searchResultsContainer.innerHTML = '<p>No products found in our inventory.</p>';
+            searchResultsContainer.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 20px;">No products found in our inventory.</p>';
             return;
         }
 
         results.forEach(product => {
             const card = document.createElement('div');
             card.className = 'result-card';
-            card.innerHTML = `<h3>${product.name}</h3><div class="price">₹${product.mrp.toFixed(2)}</div>`;
+            
+            // Generate a random icon based on name
+            const icons = ['☕', '💻', '👕', '🎧', '📱', '🎮'];
+            const icon = icons[product.name.length % icons.length];
+
+            card.innerHTML = `
+                <div class="result-img">${icon}</div>
+                <div>
+                    <h3>${product.name}</h3>
+                    <p class="store">Sold by SafeKart Official</p>
+                </div>
+                <div class="price">₹${product.mrp.toFixed(2)}</div>
+            `;
             
             const button = document.createElement('button');
             button.className = 'btn';
-            button.textContent = 'Buy & Get Verifiable QR';
+            button.textContent = 'Buy Now';
             button.addEventListener('click', () => {
                 productToPurchase = product;
                 openCheckoutModal();

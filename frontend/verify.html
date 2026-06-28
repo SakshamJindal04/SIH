@@ -11,15 +11,13 @@
     <nav>
     <div class="nav-logo"><a href="index.html">SafeKart</a></div>
     <ul class="nav-links">
-        <li><a href="verify.html">Verify Product</a></li>
-        <li><a href="qr_reader.html">QR Reader</a></li>
-        <li><a href="qr_generator.html">QR Generator</a></li>
-        <li><a href="track.html">Track Order</a></li>
+        <li><a href="shopping.html">Shop</a></li>
+        <li><a href="verify.html">Verify</a></li>
+        <li><a href="qr_reader.html">Scan</a></li>
+        <li><a href="qr_generator.html">Generate QR</a></li>
+        <li><a href="track.html">Track</a></li>
+        <li><a href="about.html">About</a></li>
         <li><a href="admin.html">Admin</a></li>
-    </ul>
-    <ul class="nav-links">
-    <li><a href="shopping.html">Shopping</a></li>
-    <li><a href="verify.html">Verify Product</a></li>
     </ul>
     <label class="theme-switch" for="theme-toggle">
         <input type="checkbox" id="theme-toggle" />
@@ -50,17 +48,29 @@
                     <label for="expiry">Expiry Date</label>
                     <input type="date" id="expiry" required>
                 </div>
-                <button type="submit" class="btn">Verify Item</button>
+                <button type="submit" class="btn" id="verify-btn">Verify Item</button>
             </form>
+            
+            <div id="inline-result" class="verification-result">
+                <div id="result-icon" class="result-icon"></div>
+                <h2 id="result-status"></h2>
+                <p id="result-details"></p>
+                <div id="inline-qr-section" style="display: none; margin-top: 15px;">
+                    <button id="view-qr-btn" class="btn btn-secondary">View QR Code</button>
+                    <div id="inline-qr-code" style="display:none; margin-top:15px;">
+                        <img id="inline-qr-img" src="" alt="QR Code" style="max-width: 200px; border-radius: 12px;"/>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
 <footer>
+    <div class="footer-quote" id="footer-quote">Trust is built with consistency.</div>
     <div class="footer-links">
-        <a href="about.html">About Us</a>
-        <a href="developer.html">Developer</a>
+        <a href="about.html">About SafeKart</a>
     </div>
-    <p>&copy; 2025 SafeKart. All Rights Reserved.</p>
+    <p class="footer-copyright">&copy; 2026 SafeKart. All Rights Reserved.</p>
 </footer>
 
     <script src="script.js"></script>

@@ -10,15 +10,13 @@
   <nav>
     <div class="nav-logo"><a href="index.html">SafeKart</a></div>
     <ul class="nav-links">
-        <li><a href="verify.html">Verify Product</a></li>
-        <li><a href="qr_reader.html">QR Reader</a></li>
-        <li><a href="qr_generator.html">QR Generator</a></li>
-        <li><a href="track.html">Track Order</a></li>
+        <li><a href="shopping.html">Shop</a></li>
+        <li><a href="verify.html">Verify</a></li>
+        <li><a href="qr_reader.html">Scan</a></li>
+        <li><a href="qr_generator.html">Generate QR</a></li>
+        <li><a href="track.html">Track</a></li>
+        <li><a href="about.html">About</a></li>
         <li><a href="admin.html">Admin</a></li>
-    </ul>
-    <ul class="nav-links">
-    <li><a href="shopping.html">Shopping</a></li>
-    <li><a href="verify.html">Verify Product</a></li>
     </ul>
     <label class="theme-switch" for="theme-toggle">
         <input type="checkbox" id="theme-toggle" />
@@ -32,10 +30,14 @@
                 <p>Enter text or a URL to create a QR code.</p>
             </header>
             <div class="form-group">
-                <textarea id="qr-text" rows="4" placeholder="Enter text or URL here..."></textarea>
+                <textarea id="qr-text" rows="3" placeholder="Enter text or URL here..."></textarea>
             </div>
             <button id="generate-btn" class="btn">Generate QR Code</button>
-            <div id="qr-code-result"></div>
+            
+            <div id="qr-code-result">
+                <div class="qr-placeholder">Your QR Code will appear here</div>
+            </div>
+            <a id="download-btn" class="btn btn-secondary" style="display: none; margin-top: 15px;" download="qrcode.png">Download QR Code</a>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator/qrcode.js"></script>
@@ -43,17 +45,38 @@
         document.getElementById('generate-btn').addEventListener('click', () => {
             const text = document.getElementById('qr-text').value;
             const qrCodeResult = document.getElementById('qr-code-result');
+            const downloadBtn = document.getElementById('download-btn');
+            
             qrCodeResult.innerHTML = '';
+            downloadBtn.style.display = 'none';
+            
             if (text) {
                 const typeNumber = 4;
                 const errorCorrectionLevel = 'L';
                 const qr = qrcode(typeNumber, errorCorrectionLevel);
                 qr.addData(text);
                 qr.make();
-                qrCodeResult.innerHTML = qr.createImgTag(5);
+                
+                qrCodeResult.innerHTML = qr.createImgTag(6, 16);
+                const imgTag = qrCodeResult.querySelector('img');
+                imgTag.style.borderRadius = '12px';
+                imgTag.style.boxShadow = '0 4px 12px var(--shadow-color)';
+                
+                // Set download link
+                downloadBtn.href = imgTag.src;
+                downloadBtn.style.display = 'inline-block';
+            } else {
+                qrCodeResult.innerHTML = '<div class="qr-placeholder">Please enter text first</div>';
             }
         });
     </script>
+    <footer>
+    <div class="footer-quote" id="footer-quote">Trust is built with consistency.</div>
+    <div class="footer-links">
+        <a href="about.html">About SafeKart</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 SafeKart. All Rights Reserved.</p>
+</footer>
     <script src="theme.js"></script>
 </body>
 </html>

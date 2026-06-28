@@ -4,15 +4,13 @@
     <body><nav>
     <div class="nav-logo"><a href="index.html">SafeKart</a></div>
     <ul class="nav-links">
-        <li><a href="verify.html">Verify Product</a></li>
-        <li><a href="qr_reader.html">QR Reader</a></li>
-        <li><a href="qr_generator.html">QR Generator</a></li>
-        <li><a href="track.html">Track Order</a></li>
+        <li><a href="shopping.html">Shop</a></li>
+        <li><a href="verify.html">Verify</a></li>
+        <li><a href="qr_reader.html">Scan</a></li>
+        <li><a href="qr_generator.html">Generate QR</a></li>
+        <li><a href="track.html">Track</a></li>
+        <li><a href="about.html">About</a></li>
         <li><a href="admin.html">Admin</a></li>
-    </ul>
-    <ul class="nav-links">
-    <li><a href="shopping.html">Shopping</a></li>
-    <li><a href="verify.html">Verify Product</a></li>
     </ul>
     <label class="theme-switch" for="theme-toggle">
         <input type="checkbox" id="theme-toggle" />
@@ -21,10 +19,55 @@
 </nav>
     <div class="main-content">
         <div class="container">
-            <h1>Track Your Order</h1>
-            <p>This feature is coming soon!</p>
+            <header>
+                <h1>🚚 Track Your Order</h1>
+                <p>Follow your package's journey below.</p>
+            </header>
+            
+            <div class="form-group" style="display:flex; gap: 10px;">
+                <input type="text" placeholder="Enter Tracking ID (e.g., SK-123456)" value="SK-894721" readonly>
+                <button class="btn" style="width: auto;">Track</button>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item completed">
+                    <div class="timeline-icon">✓</div>
+                    <div class="timeline-content">
+                        <h3>Order Placed</h3>
+                        <p>June 26, 2026 - 10:00 AM</p>
+                    </div>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-icon">✓</div>
+                    <div class="timeline-content">
+                        <h3>Packed & IoT Verified</h3>
+                        <p>June 26, 2026 - 02:30 PM - Authenticity confirmed.</p>
+                    </div>
+                </div>
+                <div class="timeline-item completed">
+                    <div class="timeline-icon">✓</div>
+                    <div class="timeline-content">
+                        <h3>Shipped</h3>
+                        <p>June 27, 2026 - 09:15 AM - Handed to delivery partner.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">...</div>
+                    <div class="timeline-content">
+                        <h3>Out for Delivery</h3>
+                        <p>Arriving today by 8:00 PM</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <footer>
+    <div class="footer-quote" id="footer-quote">Trust is built with consistency.</div>
+    <div class="footer-links">
+        <a href="about.html">About SafeKart</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 SafeKart. All Rights Reserved.</p>
+</footer>
     <script src="theme.js"></script>
 </body>
 </html>

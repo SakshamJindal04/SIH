@@ -1,36 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>About Us - SafeKart</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <nav>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - SafeKart</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .about-section {
+            margin-bottom: 50px;
+            text-align: left;
+        }
+        .about-section h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--input-border);
+            padding-bottom: 10px;
+        }
+        .about-section h3 {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        .about-section p, .about-section ul {
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+        .about-section ul {
+            padding-left: 20px;
+        }
+        .about-section li {
+            margin-bottom: 8px;
+        }
+        
+        .developer-card {
+            background: var(--bg-color);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            border: 1px solid var(--input-border);
+            margin-top: 20px;
+        }
+        .dev-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .dev-avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .dev-title h3 {
+            margin: 0;
+            color: var(--text-color);
+            font-size: 1.5rem;
+        }
+        .dev-title p {
+            margin: 5px 0 0;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .skill-badge {
+            background: var(--container-bg);
+            border: 1px solid var(--input-border);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .contact-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        .contact-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .contact-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav>
     <div class="nav-logo"><a href="index.html">SafeKart</a></div>
     <ul class="nav-links">
-        <li><a href="verify.html">Verify Product</a></li>
-        <li><a href="qr_reader.html">QR Reader</a></li>
-        <li><a href="qr_generator.html">QR Generator</a></li>
-        <li><a href="track.html">Track Order</a></li>
+        <li><a href="shopping.html">Shop</a></li>
+        <li><a href="verify.html">Verify</a></li>
+        <li><a href="qr_reader.html">Scan</a></li>
+        <li><a href="qr_generator.html">Generate QR</a></li>
+        <li><a href="track.html">Track</a></li>
+        <li><a href="about.html">About</a></li>
         <li><a href="admin.html">Admin</a></li>
-    </ul>
-    <ul class="nav-links">
-    <li><a href="shopping.html">Shopping</a></li>
-    <li><a href="verify.html">Verify Product</a></li>
     </ul>
     <label class="theme-switch" for="theme-toggle">
         <input type="checkbox" id="theme-toggle" />
         <span class="slider"></span>
     </label>
 </nav>
-        <div class="main-content">
-            <div class="container">
-                <h1>About SafeKart</h1>
-                <p>This feature is coming soon!</p>
+    
+    <div class="main-content">
+        <div class="container" style="max-width: 800px;">
+            
+            <!-- PART A: Project Info -->
+            <div class="about-section">
+                <h2>About SafeKart</h2>
+                <p><strong>SafeKart</strong> is a robust product authenticity verification platform designed to combat counterfeiting and build trust between consumers and brands.</p>
+                
+                <h3>Who is it for?</h3>
+                <p>This platform serves two primary groups: <strong>Consumers</strong> who want peace of mind knowing the products they buy are genuine, and <strong>Brands/Admins</strong> who need a reliable system to trace their inventory and protect their reputation.</p>
+                
+                <h3>Core Features</h3>
+                <ul>
+                    <li><strong>Instant Verification:</strong> Validate products instantly using cryptographic QR codes or manual barcode entry, preventing fake products from entering the supply chain.</li>
+                    <li><strong>Secure E-commerce:</strong> A mocked shopping flow that issues verifiable QR codes upon purchase, ensuring end-to-end traceability.</li>
+                    <li><strong>Admin Dashboard:</strong> Real-time logging of all verification attempts, allowing brands to monitor success rates and detect potential counterfeiting hotspots.</li>
+                    <li><strong>Dynamic UI:</strong> A modern, responsive interface featuring light/dark mode and seamless micro-interactions for a premium user experience.</li>
+                </ul>
+
+                <h3>Tech Stack</h3>
+                <p>The SafeKart architecture is designed as a modern full-stack application:</p>
+                <div class="skills-grid">
+                    <span class="skill-badge">HTML5 / CSS3</span>
+                    <span class="skill-badge">Vanilla JavaScript</span>
+                    <span class="skill-badge">Node.js (Backend API)</span>
+                    <span class="skill-badge">MongoDB (Database)</span>
+                    <span class="skill-badge">RESTful APIs</span>
+                </div>
             </div>
+
+            <!-- PART B: Developer Info -->
+            <div class="about-section">
+                <h2>About the Developer</h2>
+                <div class="developer-card">
+                    <div class="dev-header">
+                        <div class="dev-avatar">SJ</div>
+                        <div class="dev-title">
+                            <h3>Saksham Jindal</h3>
+                            <p>CS undergraduate building production-grade full-stack systems</p>
+                        </div>
+                    </div>
+                    
+                    <p>B.Tech in Computer Science & Engineering at SRM Institute of Science and Technology (SRMIST), Kattankulathur (Aug 2024 – May 2028), CGPA 8.73/10.</p>
+                    <p>Currently working as a Web Development Intern at <strong>SkillCraft Technology</strong> (June 2026 – Present), contributing to frontend features and backend API integrations in an agile environment. Also managing a student-recruiter database for 500+ students as a member of the Placement & Career Development Team (PLACFV) at SRMIST.</p>
+                    
+                    <h3>Technical Skills</h3>
+                    <div class="skills-grid">
+                        <span class="skill-badge">React.js</span>
+                        <span class="skill-badge">Next.js</span>
+                        <span class="skill-badge">Node.js</span>
+                        <span class="skill-badge">Express.js</span>
+                        <span class="skill-badge">MongoDB</span>
+                        <span class="skill-badge">Google Cloud Platform</span>
+                        <span class="skill-badge">Python</span>
+                        <span class="skill-badge">Java</span>
+                        <span class="skill-badge">Tailwind CSS</span>
+                    </div>
+
+                    <h3>Other Projects</h3>
+                    <ul>
+                        <li><strong>Exam Alchemy:</strong> Automated question paper generator using React, Node.js, MongoDB, and the Google Gemini API.</li>
+                        <li><strong>Event Attendance System:</strong> Timestamp-based attendance tracking built with the MERN stack.</li>
+                    </ul>
+
+                    <h3>Achievements & Certifications</h3>
+                    <p>3rd Place at QWIK Innovate Ideathon 2026 (50+ teams), Finalist at Smart India Hackathon 2025, and participant in Samsung Solve for Tomorrow 2025. Certified by NPTEL in Programming in Java, DBMS, and OOP.</p>
+
+                    <div class="contact-links">
+                        <a href="mailto:sakshamjindal1620@gmail.com">✉️ Email</a>
+                        <a href="#">🔗 LinkedIn</a>
+                        <a href="#">💻 GitHub</a>
+                        <a href="#">🌐 Portfolio</a>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <script src="theme.js">
-        </script>
-        
-        </body>
+    </div>
+    
+    <footer>
+        <div class="footer-quote" id="footer-quote">Trust is built with consistency.</div>
+        <div class="footer-links">
+            <a href="about.html">About SafeKart</a>
+        </div>
+        <p class="footer-copyright">&copy; 2026 SafeKart. All Rights Reserved.</p>
+    </footer>
+    <script src="theme.js"></script>
+</body>
 </html>

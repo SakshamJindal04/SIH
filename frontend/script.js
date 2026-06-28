@@ -23,12 +23,33 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Handles the logic for the item verification form on index.html.
+ * Handles the logic for the item verification form on verify.html.
  */
 function initializeVerifyPage() {
     const form = document.getElementById('verify-form');
+    const verifyBtn = document.getElementById('verify-btn');
+    const inlineResult = document.getElementById('inline-result');
+    const resultIcon = document.getElementById('result-icon');
+    const resultStatus = document.getElementById('result-status');
+    const resultDetails = document.getElementById('result-details');
+    const inlineQrSection = document.getElementById('inline-qr-section');
+    const inlineQrCode = document.getElementById('inline-qr-code');
+    const inlineQrImg = document.getElementById('inline-qr-img');
+    const viewQrBtn = document.getElementById('view-qr-btn');
+
+    if (viewQrBtn) {
+        viewQrBtn.addEventListener('click', () => {
+            inlineQrCode.style.display = inlineQrCode.style.display === 'none' ? 'block' : 'none';
+        });
+    }
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault(); // Prevent default form submission
+        
+        verifyBtn.textContent = "Verifying...";
+        verifyBtn.disabled = true;
+        inlineResult.style.display = 'none';
+        inlineQrSection.style.display = 'none';
 
         // Collect form data
         const itemData = {
@@ -47,47 +68,44 @@ function initializeVerifyPage() {
 
             const result = await response.json();
 
-            // Store result in sessionStorage to pass it to the next page
-            sessionStorage.setItem('verificationResult', JSON.stringify(result));
-
-            // Redirect to the result page
-            window.location.href = 'result.html';
+            // Display inline result
+            inlineResult.style.display = 'block';
+            inlineResult.className = 'verification-result'; // reset classes
+            
+            if (result.status === 'PASS') {
+                inlineResult.classList.add('pass');
+                resultIcon.textContent = '✅';
+                resultStatus.textContent = 'Authentic Product';
+                resultStatus.style.color = 'var(--success-color)';
+                resultDetails.textContent = `Item with barcode ${result.verification.barcode} has been successfully verified.`;
+                
+                // Set QR code data
+                if (result.verification.qrCodeData) {
+                    inlineQrImg.src = result.verification.qrCodeData;
+                    inlineQrSection.style.display = 'block';
+                    inlineQrCode.style.display = 'none'; // hidden by default
+                }
+            } else {
+                inlineResult.classList.add('fail');
+                resultIcon.textContent = '❌';
+                resultStatus.textContent = 'Verification Failed';
+                resultStatus.style.color = 'var(--error-color)';
+                resultDetails.textContent = `Reason: ${result.reason}`;
+            }
 
         } catch (error) {
             console.error('Error verifying item:', error);
-            alert('Could not connect to the server. Please ensure it is running.');
+            inlineResult.style.display = 'block';
+            inlineResult.className = 'verification-result fail';
+            resultIcon.textContent = '⚠️';
+            resultStatus.textContent = 'Connection Error';
+            resultStatus.style.color = 'var(--error-color)';
+            resultDetails.textContent = 'Could not connect to the verification server. Please try again later.';
+        } finally {
+            verifyBtn.textContent = "Verify Item";
+            verifyBtn.disabled = false;
         }
     });
-}
-
-/**
- * Handles the logic for the result.html page.
- */
-function initializeResultPage() {
-    const resultData = JSON.parse(sessionStorage.getItem('verificationResult'));
-    if (!resultData) {
-        // If no result data is found, redirect back to the home page
-        window.location.href = 'index.html';
-        return;
-    }
-
-    const resultDisplay = document.getElementById('result-display');
-    const statusEl = document.getElementById('status');
-    const detailsEl = document.getElementById('details');
-    const qrSection = document.getElementById('qr-section');
-
-    if (resultData.status === 'PASS') {
-        statusEl.textContent = '✅ PASS';
-        statusEl.className = 'status-pass';
-        resultDisplay.classList.add('pass');
-        detailsEl.textContent = `Item with barcode ${resultData.verification.barcode} is authentic.`;
-        qrSection.style.display = 'block'; // Show the 'View QR' button
-    } else {
-        statusEl.textContent = '❌ FAIL';
-        statusEl.className = 'status-fail';
-        resultDisplay.classList.add('fail');
-        detailsEl.textContent = `Reason: ${resultData.reason}`;
-    }
 }
 
 /**

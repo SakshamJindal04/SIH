@@ -1,58 +1,75 @@
 // backend/server.js
 
+// --- 0. LOAD ENV VARIABLES ---
+require("dotenv").config();
+
 // --- 1. IMPORTS ---
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const qrcode = require('qrcode');
-const path = require('path');
-const { v4: uuidv4 } = require('uuid');
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const qrcode = require("qrcode");
+const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 // Models
-const Verification = require('./models/Verification');
-const Product = require('./models/Product');
-const Customer = require('./models/Customer');
+const Verification = require("./models/Verification");
+const Product = require("./models/Product");
+const Customer = require("./models/Customer");
 
 // --- 2. APP CONFIG ---
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
+const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
 
 // --- 3. MIDDLEWARE ---
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../frontend')));
+
+// This line serves static assets like CSS and JS from the 'frontend' directory
+app.use(express.static(path.join(__dirname, "../frontend")));
+
+// ✅ --- THIS IS THE FIX --- ✅
+// This new route specifically serves your index.html file when visiting the root URL
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/html/index.html'));
+});
 
 // --- 4. SAMPLE PRODUCTS (used for initial seeding) ---
 const sampleProducts = [
-  { barcode: '8900000000001', name: 'SmartLED Pro Laptop 14 inch', weight: 1400, mrp: 89999.00 },
-  { barcode: '8900000000002', name: 'AuraSound Wireless Headphones', weight: 250, mrp: 7999.00 },
-  { barcode: '8900000000003', name: 'PixelSnap 12 Smartphone', weight: 180, mrp: 65000.00 },
-  { barcode: '8901234567890', name: 'Organic Green Tea', weight: 250, mrp: 199.50 },
-  { barcode: '8909876543210', name: 'Premium California Almonds', weight: 500, mrp: 750.00 },
-  { barcode: '8901122334455', name: 'Rich Aroma Instant Coffee', weight: 100, mrp: 320.00 },
-  { barcode: '8900000000004', name: 'Extra Virgin Olive Oil', weight: 1000, mrp: 1250.00 },
-  { barcode: '8900000000005', name: 'Men\'s Cotton Crew T-Shirt (Blue)', weight: 180, mrp: 899.00 },
-  { barcode: '8900000000006', name: 'Women\'s Slim Fit Jeans', weight: 450, mrp: 2499.00 },
-  { barcode: '8900000000007', name: 'EcoLight 9W LED Bulb Pack of 4', weight: 200, mrp: 550.00 },
-  { barcode: '8900000000008', name: 'DuraSteel Non-Stick Frying Pan', weight: 700, mrp: 1800.00 },
-  { barcode: '8900000000009', name: 'The Midnight Library - Novel', weight: 350, mrp: 450.00 },
+  { barcode: "8900000000001", name: "SmartLED Pro Laptop 14 inch", weight: 1400, mrp: 89999.0 },
+  { barcode: "8900000000002", name: "AuraSound Wireless Headphones", weight: 250, mrp: 7999.0 },
+  { barcode: "8900000000003", name: "PixelSnap 12 Smartphone", weight: 180, mrp: 65000.0 },
+  { barcode: "8901234567890", name: "Organic Green Tea", weight: 250, mrp: 199.5 },
+  { barcode: "8909876543210", name: "Premium California Almonds", weight: 500, mrp: 750.0 },
+  { barcode: "8901122334455", name: "Rich Aroma Instant Coffee", weight: 100, mrp: 320.0 },
+  { barcode: "8900000000004", name: "Extra Virgin Olive Oil", weight: 1000, mrp: 1250.0 },
+  { barcode: "8900000000005", name: "Men's Cotton Crew T-Shirt (Blue)", weight: 180, mrp: 899.0 },
+  { barcode: "8900000000006", name: "Women's Slim Fit Jeans", weight: 450, mrp: 2499.0 },
+  { barcode: "8900000000007", name: "EcoLight 9W LED Bulb Pack of 4", weight: 200, mrp: 550.0 },
+  { barcode: "8900000000008", name: "DuraSteel Non-Stick Frying Pan", weight: 700, mrp: 1800.0 },
+  { barcode: "8900000000009", name: "The Midnight Library - Novel", weight: 350, mrp: 450.0 },
 ];
 
 // --- 5. ROUTES ---
 
 // Search products
-app.get('/search-products/:query', async (req, res) => {
+app.get("/search-products/:query", async (req, res) => {
   try {
     const query = req.params.query;
-    const results = await Product.find({ name: { $regex: query, $options: 'i' } });
+    const results = await Product.find({ name: { $regex: query, $options: "i" } });
     res.json(results);
   } catch (error) {
-    res.status(500).json({ message: 'Error during product search.' });
+    res.status(500).json({ message: "Error during product search." });
   }
 });
 
 // Purchase
-app.post('/purchase', async (req, res) => {
+app.post("/purchase", async (req, res) => {
   try {
     const { customerName, customerEmail, customerMobile, productBarcode } = req.body;
     const product = await Product.findOne({ barcode: productBarcode });
@@ -64,28 +81,30 @@ app.post('/purchase', async (req, res) => {
     const newCustomer = new Customer({
       name: customerName,
       email: customerEmail,
-      mobile: customerMobile
+      mobile: customerMobile,
+      purchaseDate: new Date(),
     });
     await newCustomer.save();
 
     res.status(201).json({
       message: "Purchase recorded",
       customerId: newCustomer._id,
-      product: product
+      product: product,
     });
   } catch (error) {
+    console.error("Error in /purchase:", error);
     res.status(500).json({ message: "Server Error during purchase." });
   }
 });
 
 // Verify product
-app.post('/verify', async (req, res) => {
+app.post("/verify", async (req, res) => {
   try {
     const { barcode, weight, mrp, customerId } = req.body;
     const officialProduct = await Product.findOne({ barcode: barcode });
 
     if (!officialProduct) {
-      return res.status(400).json({ status: 'FAIL', reason: 'Barcode not found in company records.' });
+      return res.status(400).json({ status: "FAIL", reason: "Barcode not found in company records." });
     }
 
     const validationFailures = [];
@@ -97,56 +116,80 @@ app.post('/verify', async (req, res) => {
     }
 
     if (validationFailures.length > 0) {
-      const reason = validationFailures.join(' ');
-      const verification = new Verification({ barcode, status: 'FAIL', reason, customer: customerId });
+      const reason = validationFailures.join(" ");
+      const verification = new Verification({ barcode, status: "FAIL", reason, customer: customerId });
       await verification.save();
-      return res.status(400).json({ status: 'FAIL', reason });
+      return res.status(400).json({ status: "FAIL", reason });
     } else {
-      const verification = new Verification({ barcode, status: 'PASS', customer: customerId });
-      const scanUrl = `http://localhost:${PORT}/scan/${verification._id}`;
+      const verification = new Verification({ barcode, status: "PASS", customer: customerId });
+      const scanUrl = `${BASE_URL}/scan/${verification._id}`;
       const qrCodeDataURL = await qrcode.toDataURL(scanUrl);
 
       verification.qrCodeData = qrCodeDataURL;
       await verification.save();
 
-      return res.status(200).json({ status: 'PASS', verification });
+      return res.status(200).json({ status: "PASS", verification });
     }
   } catch (error) {
-    console.error('Error in /verify:', error);
-    res.status(500).json({ status: 'ERROR', message: 'Internal Server Error' });
+    console.error("Error in /verify:", error);
+    res.status(500).json({ status: "ERROR", message: "Internal Server Error" });
   }
 });
 
 // Scan QR
-app.get('/scan/:id', async (req, res) => {
+app.get("/scan/:id", async (req, res) => {
   try {
-    const verification = await Verification.findById(req.params.id).populate('customer');
-    const product = await Product.findOne({ barcode: verification.barcode });
+    const verification = await Verification.findById(req.params.id).populate("customer");
 
     if (!verification) {
-      return res.status(404).send('<h1>Verification not found.</h1>');
+      return res.status(404).send("<h1>Verification not found.</h1>");
     }
+
+    const product = await Product.findOne({ barcode: verification.barcode });
 
     if (verification.scanCount >= 3) {
-      return res.status(403).send(`<div style="font-family: sans-serif; text-align: center; padding: 40px;"><h1 style="color: #e74c3c;">❌ QR Code Expired</h1><p>This QR code has reached its maximum scan limit of 3.</p><p>Product: ${product.name}</p></div>`);
+      return res.status(403).send(`
+        <div style="font-family: sans-serif; text-align: center; padding: 40px;">
+          <h1 style="color: #e74c3c;">❌ QR Code Expired</h1>
+          <p>This QR code has reached its maximum scan limit of 3.</p>
+          <p>Product: ${product.name}</p>
+        </div>
+      `);
     }
 
-    verification.scanCount += 1;
+    verification.scanCount = (verification.scanCount || 0) + 1;
     await verification.save();
 
-    res.status(200).send(`<div style="font-family: sans-serif; text-align: center; padding: 40px; border: 5px solid #2ecc71; margin: 20px;"><h1 style="color: #2ecc71;">✅ Product Verified</h1><h2>${product.name}</h2><p><strong>Barcode:</strong> ${product.barcode}</p><p><strong>Weight:</strong> ${product.weight}g</p><p><strong>MRP:</strong> ₹${product.mrp.toFixed(2)}</p><hr><h3>Customer Details</h3><p><strong>Name:</strong> ${verification.customer.name}</p><p><strong>Email:</strong> ${verification.customer.email}</p><p><strong>Purchase Date:</strong> ${new Date(verification.customer.purchaseDate).toLocaleString()}</p><hr><h2 style="color: #3498db;">Scan Count: ${verification.scanCount} of 3</h2></div>`);
+    res.status(200).send(`
+      <div style="font-family: sans-serif; text-align: center; padding: 40px; border: 5px solid #2ecc71; margin: 20px;">
+        <h1 style="color: #2ecc71;">✅ Product Verified</h1>
+        <h2>${product.name}</h2>
+        <p><strong>Barcode:</strong> ${product.barcode}</p>
+        <p><strong>Weight:</strong> ${product.weight}g</p>
+        <p><strong>MRP:</strong> ₹${product.mrp.toFixed(2)}</p>
+        <hr>
+        <h3>Customer Details</h3>
+        <p><strong>Name:</strong> ${verification.customer.name}</p>
+        <p><strong>Email:</strong> ${verification.customer.email}</p>
+        <p><strong>Purchase Date:</strong> ${new Date(verification.customer.purchaseDate).toLocaleString()}</p>
+        <hr>
+        <h2 style="color: #3498db;">Scan Count: ${verification.scanCount} of 3</h2>
+      </div>
+    `);
   } catch (error) {
-    res.status(500).send('<h1>Internal Server Error</h1>');
+    console.error("Error in /scan/:id:", error);
+    res.status(500).send("<h1>Internal Server Error</h1>");
   }
 });
 
 // Logs
-app.get('/logs', async (req, res) => {
+app.get("/logs", async (req, res) => {
   try {
-    const logs = await Verification.find().sort({ timestamp: -1 }).populate('customer');
+    const logs = await Verification.find().sort({ timestamp: -1 }).populate("customer");
     res.status(200).json(logs);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching logs' });
+    console.error("Error fetching logs:", error);
+    res.status(500).json({ message: "Error fetching logs" });
   }
 });
 
@@ -155,28 +198,28 @@ const seedDatabaseIfNeeded = async () => {
   try {
     const productCount = await Product.countDocuments();
     if (productCount === 0) {
-      console.log('Product database is empty. Seeding with local data...');
+      console.log("Product database is empty. Seeding with local data...");
       await Product.insertMany(sampleProducts);
-      console.log('✅ Database seeded successfully!');
+      console.log("✅ Database seeded successfully!");
     } else {
-      console.log('Product database already contains data. Skipping seed.');
+      console.log("Product database already contains data. Skipping seed.");
     }
   } catch (error) {
-    console.error('❌ Error during database seeding:', error.message);
+    console.error("❌ Error during database seeding:", error.message);
   }
 };
 
 // --- 7. START SERVER ---
 const startServer = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log('✅ MongoDB connected successfully!');
+    await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    console.log("✅ MongoDB connected successfully!");
     await seedDatabaseIfNeeded();
     app.listen(PORT, () => {
-      console.log(`🚀 SafeKart Server is running on http://localhost:${PORT}`);
+      console.log(`🚀 SafeKart Server is running on ${BASE_URL}`);
     });
   } catch (error) {
-    console.error('❌ MongoDB connection error:', error);
+    console.error("❌ MongoDB connection error:", error);
     process.exit(1);
   }
 };

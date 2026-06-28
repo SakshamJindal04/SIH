@@ -1,15 +1,12 @@
+// backend/config/db.js
 const mongoose = require("mongoose");
-
-const MONGO_URI = "mongodb+srv://safekart_user:MySafePassword2025@safekartcluster.yiu8d5o.mongodb.net/?retryWrites=true&w=majority&appName=SafekartCluster";
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(MONGO_URI, {
-      // No need for useNewUrlParser or useUnifiedTopology in latest mongoose
-    });
+    await mongoose.connect(process.env.MONGO_URI);
     console.log("✅ MongoDB connected successfully!");
   } catch (error) {
-    console.error("❌ MongoDB connection error:", error);
+    console.error("❌ MongoDB connection error:", error.message);
     process.exit(1);
   }
 };

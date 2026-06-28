@@ -10,15 +10,13 @@
    <nav>
     <div class="nav-logo"><a href="index.html">SafeKart</a></div>
     <ul class="nav-links">
-        <li><a href="verify.html">Verify Product</a></li>
-        <li><a href="qr_reader.html">QR Reader</a></li>
-        <li><a href="qr_generator.html">QR Generator</a></li>
-        <li><a href="track.html">Track Order</a></li>
+        <li><a href="shopping.html">Shop</a></li>
+        <li><a href="verify.html">Verify</a></li>
+        <li><a href="qr_reader.html">Scan</a></li>
+        <li><a href="qr_generator.html">Generate QR</a></li>
+        <li><a href="track.html">Track</a></li>
+        <li><a href="about.html">About</a></li>
         <li><a href="admin.html">Admin</a></li>
-    </ul>
-    <ul class="nav-links">
-    <li><a href="shopping.html">Shopping</a></li>
-    <li><a href="verify.html">Verify Product</a></li>
     </ul>
     <label class="theme-switch" for="theme-toggle">
         <input type="checkbox" id="theme-toggle" />
@@ -26,37 +24,61 @@
     </label>
 </nav>
     <div class="main-content">
-        <div class="container hero">
-            <h1>Your Trusted Shopping Partner.</h1>
-            <p>Verify any product's authenticity in seconds. Ensure safety and quality with every purchase through our advanced IoT verification system.</p>
+        <div class="hero-wrapper">
+            <div class="hero-bg-blob blob-1"></div>
+            <div class="hero-bg-blob blob-2"></div>
+            <div class="container hero" style="display:flex; flex-direction: column; align-items: center; gap: 20px;">
+                <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=2070&auto=format&fit=crop" alt="Shopping boxes" style="width: 100%; border-radius: 12px; height: 250px; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px;"/>
+                <h1>Your Trusted Shopping Partner.</h1>
+                <p>Verify any product's authenticity in seconds. Ensure safety and quality with every purchase through our advanced IoT verification system.</p>
+            </div>
         </div>
     </div>
 
     <section class="features">
         <a href="verify.html" class="feature-card">
-            <h3>✅ Product Verification</h3>
+            <span class="feature-icon">✅</span>
+            <h3>Product Verification</h3>
             <p>Enter item details manually to check its authenticity against our records.</p>
         </a>
         <a href="qr_reader.html" class="feature-card">
-            <h3>📷 Scan QR Code</h3>
+            <span class="feature-icon">📷</span>
+            <h3>Scan QR Code</h3>
             <p>Use your device's camera to scan a product's QR code instantly.</p>
         </a>
         <a href="qr_generator.html" class="feature-card">
-            <h3>✨ Generate QR Code</h3>
+            <span class="feature-icon">✨</span>
+            <h3>Generate QR Code</h3>
             <p>Create your own QR codes for text, URLs, or any other data you need.</p>
         </a>
         <a href="track.html" class="feature-card">
-            <h3>🚚 Track Your Order</h3>
-            <p>Get real-time updates on your order status. (Coming Soon)</p>
+            <span class="feature-icon">🚚</span>
+            <h3>Track Your Order</h3>
+            <p>Get real-time updates on your order's journey from warehouse to your door.</p>
         </a>
     </section>
 
-   <footer>
-    <div class="footer-links">
-        <a href="about.html">About Us</a>
-        <a href="developer.html">Developer</a>
+    <div class="main-content" style="padding-top: 0;">
+        <div class="container" style="max-width: 900px; display:flex; gap: 40px; align-items: center; text-align: left; padding: 40px;">
+            <div style="flex: 1;">
+                <h2 style="font-size: 2rem; color: var(--primary-color); margin-bottom: 15px;">Why Choose SafeKart?</h2>
+                <p style="font-size: 1.1rem; color: var(--text-muted); line-height: 1.6; font-style: italic; border-left: 4px solid var(--primary-color); padding-left: 15px;">
+                    "Counterfeit products don't just harm brands; they harm consumers. SafeKart bridges the gap between trust and technology, providing an unbreakable chain of authenticity from the warehouse to your hands."
+                </p>
+                <a href="about.html" class="btn" style="margin-top: 20px; width: max-content;">Learn More About Us</a>
+            </div>
+            <div style="flex: 1;">
+                <img src="https://images.unsplash.com/photo-1550565118-3a14e8d0386f?q=80&w=2070&auto=format&fit=crop" alt="Secure Technology" style="width: 100%; border-radius: 16px; box-shadow: 0 10px 30px var(--shadow-color);"/>
+            </div>
+        </div>
     </div>
-    <p>&copy; 2025 SafeKart. All Rights Reserved.</p>
+
+   <footer>
+    <div class="footer-quote" id="footer-quote">Trust is built with consistency.</div>
+    <div class="footer-links">
+        <a href="about.html">About SafeKart</a>
+    </div>
+    <p class="footer-copyright">&copy; 2026 SafeKart. All Rights Reserved.</p>
 </footer>
 
     <script src="theme.js"></script>

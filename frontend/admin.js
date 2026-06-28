@@ -26,7 +26,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fetchAndDisplayLogs = async () => {
         const tableBody = document.getElementById('logs-table-body');
-        tableBody.innerHTML = '<tr><td colspan="5">Loading logs...</td></tr>';
+        
+        // Skeleton loader rows
+        let skeletonHtml = '';
+        for(let i=0; i<4; i++) {
+            skeletonHtml += `<tr>
+                <td><div class="skeleton-loader" style="height: 16px; width: 80%; border-radius: 4px;"></div></td>
+                <td><div class="skeleton-loader" style="height: 16px; width: 90%; border-radius: 4px;"></div></td>
+                <td><div class="skeleton-loader" style="height: 24px; width: 60px; border-radius: 12px;"></div></td>
+                <td><div class="skeleton-loader" style="height: 16px; width: 70%; border-radius: 4px;"></div></td>
+                <td><div class="skeleton-loader" style="height: 16px; width: 50%; border-radius: 4px;"></div></td>
+            </tr>`;
+        }
+        tableBody.innerHTML = skeletonHtml;
 
         try {
             // Using a relative URL, which is best practice
@@ -88,12 +100,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (username === CORRECT_USERNAME && password === CORRECT_PASSWORD) {
             sessionStorage.setItem('isAdminLoggedIn', 'true');
-
+            loginError.textContent = '';
             showDashboard();
         } else {
             loginError.textContent = 'Invalid username or password.';
+            loginForm.style.animation = 'shake 0.4s ease-in-out';
+            setTimeout(() => { loginForm.style.animation = ''; }, 400);
         }
     });
+
+    // Add keyframes for shake if not present
+    if (!document.getElementById('shake-style')) {
+        const style = document.createElement('style');
+        style.id = 'shake-style';
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                75% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
 
     logoutBtn.addEventListener('click', showLogin);
 
